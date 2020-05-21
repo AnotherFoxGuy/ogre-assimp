@@ -34,11 +34,20 @@
 # -----------------------------------------------------------------------------
 #*/
 cmake_minimum_required(VERSION 3.10)
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 include(pmm)
 
 project(ogreassimp)
+
+pmm(CONAN
+        REMOTES ror-dependencies https://api.bintray.com/conan/anotherfoxguy/ror-dependencies
+        OGRE-dependencies https://api.bintray.com/conan/anotherfoxguy/OGRE-dependencies
+        BINCRAFTERS
+        CMakeCM ROLLING)
+
+set(CMAKE_CXX_STANDARD 11)
+
+
 
 set(OGREASSIMP_VERSION_STRING "0.1.1")
 set(OGREASSIMP_VERSION_STRING_MAJOR "0")
@@ -51,12 +60,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
 
-
-pmm(CONAN
-        REMOTES ror-dependencies https://api.bintray.com/conan/anotherfoxguy/ror-dependencies
-        OGRE-dependencies https://api.bintray.com/conan/anotherfoxguy/OGRE-dependencies
-        BINCRAFTERS
-        CMakeCM ROLLING)
 
 include_directories(src/)
 

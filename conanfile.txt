@@ -4,6 +4,7 @@ cmake
 [requires]
 assimp/5.0.1
 OGRE/1.12.6@anotherfoxguy/testing
+zlib/1.2.11
 
 [imports]
 bin, *.dll -> ./bin @ keep_path=False
