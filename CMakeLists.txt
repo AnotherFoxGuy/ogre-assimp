@@ -33,9 +33,10 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 #*/
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+include(pmm)
 
 project(ogreassimp)
 
@@ -50,20 +51,23 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
 
-find_package(OGRE 1.10 REQUIRED)
-link_directories(${OGRE_LIBRARY_DIRS})
-find_package(ASSIMP REQUIRED)
 
-include_directories(${OGRE_INCLUDE_DIRS} ${ASSIMP_INCLUDE_DIRS} src/)
+pmm(CONAN
+        REMOTES ror-dependencies https://api.bintray.com/conan/anotherfoxguy/ror-dependencies
+        OGRE-dependencies https://api.bintray.com/conan/anotherfoxguy/OGRE-dependencies
+        BINCRAFTERS
+        CMakeCM ROLLING)
+
+include_directories(src/)
 
 set(HDRS src/AssimpLoader.h)
 add_library(OgreAssimpLoader src/AssimpLoader.cpp ${HDRS})
 set_target_properties(OgreAssimpLoader PROPERTIES DEBUG_POSTFIX _d)
-target_link_libraries(OgreAssimpLoader ${OGRE_LIBRARIES} ${ASSIMP_LIBRARIES})
+target_link_libraries(OgreAssimpLoader CONAN_PKG::OGRE CONAN_PKG::assimp)
 
 install(TARGETS OgreAssimpLoader RUNTIME DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HDRS} DESTINATION include/OgreAssimpLoader)
 
 add_executable(OgreAssimpConverter tool/main.cpp)
-target_link_libraries(OgreAssimpConverter OgreAssimpLoader)
+target_link_libraries(OgreAssimpConverter OgreAssimpLoader CONAN_PKG::OGRE CONAN_PKG::assimp)
 install(TARGETS OgreAssimpConverter RUNTIME DESTINATION bin)
