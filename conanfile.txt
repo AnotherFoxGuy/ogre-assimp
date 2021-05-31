@@ -3,9 +3,13 @@ cmake
 
 [requires]
 assimp/5.0.1
-OGRE/1.12.6@anotherfoxguy/testing
+OGRE/1.12.12@anotherfoxguy/testing
 zlib/1.2.11
 
 [imports]
 bin, OgreMain.dll -> ./bin @ keep_path=False
 bin, OgreMeshLodGenerator.dll -> ./bin @ keep_path=False
+bin, *.dll -> ./bin @ root_package=assimp, keep_path=False
+
+[options]
+assimp:shared=True
